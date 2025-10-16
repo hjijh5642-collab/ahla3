@@ -10,7 +10,7 @@
             box-sizing: border-box; 
         }
         body {
-            font-family: 'Courier New', monospace;
+            font-family: 'Courier New', Monaco, 'Cascadia Code', 'Source Code Pro', monospace;
             background: #000;
             color: #ff0000;
             overflow: hidden;
@@ -19,13 +19,13 @@
         }
         .warning {
             border: 5px solid #ff0000;
-            padding: 30px;
-            margin: 20px auto;
+            padding: 20px;
+            margin: 15px auto;
             max-width: 90%;
             background: #111;
             animation: blink 0.3s infinite;
             text-align: center;
-            font-size: 24px;
+            font-size: 20px;
             font-weight: bold;
         }
         @keyframes blink {
@@ -40,11 +40,12 @@
         }
         .info {
             background: #222;
-            padding: 20px;
-            margin: 15px 0;
-            border-left: 8px solid #ff0000;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 6px solid #ff0000;
             text-align: right;
             animation: pulse 1s infinite;
+            font-size: 14px;
         }
         @keyframes pulse {
             0% { opacity: 1; }
@@ -112,82 +113,98 @@
             }
         }
         
-        /* التعديلات الجديدة لعرض الـ IP */
+        /* تصغير حاوية الـ IP مع الحفاظ على جميع التأثيرات */
         .ip-display-container {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 999;
+            position: relative;
+            margin: 20px auto;
+            z-index: 100;
             text-align: center;
             background: rgba(0, 0, 0, 0.9);
-            padding: 40px;
-            border: 8px solid #ff0000;
+            padding: 25px 15px;
+            border: 6px solid #ff0000;
             border-radius: 15px;
             box-shadow: 0 0 50px #ff0000;
-            animation: ipPulse 1s infinite;
+            animation: ipPulse 0.8s infinite;
+            max-width: 90%;
+            backdrop-filter: blur(5px);
         }
+        
         @keyframes ipPulse {
             0%, 100% { 
                 box-shadow: 0 0 50px #ff0000;
-                transform: translate(-50%, -50%) scale(1);
+                transform: scale(1);
             }
             50% { 
                 box-shadow: 0 0 80px #ff0000, 0 0 100px #ff0000;
-                transform: translate(-50%, -50%) scale(1.05);
+                transform: scale(1.02);
             }
         }
+
         .ip-title {
-            font-size: 36px;
+            font-size: 24px;
             font-weight: bold;
             color: #ff0000;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             text-transform: uppercase;
             animation: superBlink 0.2s infinite;
+            font-family: 'Courier New', Monaco, 'Cascadia Code', 'Source Code Pro', monospace;
         }
+
         .ip-address {
-            font-size: 72px;
-            font-weight: bold;
+            font-size: 42px;
+            font-weight: bolder;
             color: #ffffff;
-            background: #ff0000;
-            padding: 30px;
+            background: linear-gradient(45deg, #ff0000, #ff4444);
+            padding: 20px;
             border-radius: 10px;
-            margin: 20px 0;
-            font-family: 'Courier New', monospace;
-            letter-spacing: 3px;
+            margin: 15px 0;
+            font-family: 'Courier New', Monaco, 'Cascadia Code', 'Source Code Pro', monospace;
+            letter-spacing: 2px;
             text-shadow: 2px 2px 4px #000000;
-            animation: ipFlash 0.5s infinite;
+            animation: ipFlash 0.4s infinite;
+            border: 3px solid #ffffff;
         }
+        
         @keyframes ipFlash {
             0%, 100% { 
-                background: #ff0000;
+                background: linear-gradient(45deg, #ff0000, #ff4444);
                 color: #ffffff;
             }
             50% { 
-                background: #ffffff;
+                background: linear-gradient(45deg, #ffffff, #ffeeee);
                 color: #ff0000;
             }
         }
+
         .ip-subtitle {
-            font-size: 24px;
-            color: #ff6666;
-            margin-top: 20px;
+            font-size: 16px;
+            color: #ff9999;
+            margin-top: 15px;
+            font-weight: bold;
+            font-family: 'Courier New', Monaco, 'Cascadia Code', 'Source Code Pro', monospace;
+        }
+
+        /* تأثير الاهتزاز */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+            20%, 40%, 60%, 80% { transform: translateX(10px); }
         }
     </style>
 </head>
 <body>
-    <!-- حاوية عرض الـ IP في وسط الشاشة -->
+    <div class='warning flashing-text'>
+        <h1>🚨 CRITICAL SECURITY BREACH 🚨</h1>
+        <h2>UNAUTHORIZED ACCESS DETECTED</h2>
+    </div>
+    
+    <!-- حاوية الـ IP المصغرة مع كل التأثيرات -->
     <div class="ip-display-container">
         <div class="ip-title">🌐 عنوان الـ IP الخاص بك</div>
         <div class="ip-address" id="mainIpDisplay">جاري التتبع...</div>
         <div class="ip-subtitle" id="mainLocationDisplay">جاري تحديد الموقع...</div>
     </div>
 
-    <div class='warning flashing-text'>
-        <h1>🚨 CRITICAL SECURITY BREACH 🚨</h1>
-        <h2>UNAUTHORIZED ACCESS DETECTED</h2>
-    </div>
-    
     <div class='info'>
         <h3>📋 COMPROMISED DATA:</h3>
         <p><strong>🌐 TARGET IP:</strong> <span id="clientIP">TRACKING...</span></p>
@@ -214,9 +231,14 @@
     </div>
     
     <div id='terrorMessages' class='terror-messages'></div>
+
+    <!-- إضافة صوت إنذار كملف صوتي بديل -->
+    <audio id="sirenAudio" preload="auto">
+        <source src="https://assets.mixkit.co/active_storage/sfx/259/259-preview.mp3" type="audio/mpeg">
+        <source src="https://assets.mixkit.co/active_storage/sfx/259/259.wav" type="audio/wav">
+    </audio>
     
     <script>
-        // نفس رسائل البايثون بالضبط
         const terrorMessages = [
             "🚨 SYSTEM BREACH DETECTED 🚨",
             "⚠️ UNAUTHORIZED ACCESS RECORDED ⚠️",
@@ -235,18 +257,16 @@
             "🔴 TERMINATE CONNECTION IMMEDIATELY 🔴"
         ];
 
-        // دالة الحصول على IP والموقع - مثل البايثون
+        // دالة الحصول على IP والموقع
         async function getClientInfo() {
             try {
                 const ipResponse = await fetch('https://api.ipify.org?format=json');
                 const ipData = await ipResponse.json();
                 const clientIP = ipData.ip;
                 
-                // تحديث جميع أماكن عرض الـ IP
                 document.getElementById('clientIP').textContent = clientIP;
                 document.getElementById('mainIpDisplay').textContent = clientIP;
                 
-                // محاولة الحصول على الموقع
                 try {
                     const locResponse = await fetch(`https://ipapi.co/${clientIP}/json/`);
                     const locData = await locResponse.json();
@@ -277,37 +297,54 @@
             document.getElementById('currentTime').textContent = timeString;
         }
 
-        // دالة صوت الإنذار - مثل البايثون
+        // دالة صوت الإنذار المحسنة
         function playSiren() {
             try {
-                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                const oscillator = audioContext.createOscillator();
-                const gainNode = audioContext.createGain();
-                
-                oscillator.connect(gainNode);
-                gainNode.connect(audioContext.destination);
-                
-                oscillator.type = 'sawtooth';
-                oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
-                oscillator.frequency.exponentialRampToValueAtTime(1600, audioContext.currentTime + 0.5);
-                
-                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-                
-                oscillator.start();
-                oscillator.stop(audioContext.currentTime + 0.5);
+                // المحاولة الأولى: استخدام Web Audio API
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (AudioContext) {
+                    const audioContext = new AudioContext();
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator.type = 'sawtooth';
+                    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(1600, audioContext.currentTime + 0.5);
+                    
+                    gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                    
+                    oscillator.start();
+                    oscillator.stop(audioContext.currentTime + 0.5);
+                    return;
+                }
             } catch (error) {
-                // الصوت غير مدعوم
-                console.log('Audio not supported');
+                console.log('Web Audio API not supported');
+            }
+            
+            // المحاولة الثانية: استخدام ملف صوتي
+            try {
+                const audio = document.getElementById('sirenAudio');
+                if (audio && typeof audio.play === 'function') {
+                    audio.currentTime = 0;
+                    audio.play().catch(e => {
+                        console.log('Audio playback failed:', e);
+                    });
+                }
+            } catch (audioError) {
+                console.log('Audio element not available');
             }
         }
 
-        // تشغيل الإنذار بشكل متكرر - مثل البايثون
+        // تشغيل الإنذار بشكل متكرر
         function startSiren() {
             setInterval(playSiren, 500);
         }
 
-        // دالة عرض رسائل الرعب - مثل البايثون
+        // دالة عرض رسائل الرعب
         function showTerrorMessages() {
             const container = document.getElementById('terrorMessages');
             container.style.display = 'block';
@@ -320,14 +357,13 @@
                     msgElement.style.animationDelay = (index * 0.1) + 's';
                     container.appendChild(msgElement);
                     
-                    // جعل الصفحة تهتز - تأثير إضافي
                     document.body.style.animation = 'shake 0.5s infinite';
                     
                 }, index * 200);
             });
         }
 
-        // دالة العد التنازلي - مثل البايثون
+        // دالة العد التنازلي
         function startCountdown() {
             let timerCount = 10;
             const countdownElement = document.getElementById('timer');
@@ -342,7 +378,6 @@
                     startSiren();
                     showTerrorMessages();
                     
-                    // تغيير لون الخلفية بشكل عشوائي - مثل البايثون
                     setInterval(() => {
                         document.body.style.background = '#' + Math.floor(Math.random()*16777215).toString(16);
                     }, 100);
@@ -351,18 +386,7 @@
             }, 1000);
         }
 
-        // تأثير الاهتزاز
-        const shakeStyle = document.createElement('style');
-        shakeStyle.textContent = `
-            @keyframes shake {
-                0%, 100% { transform: translateX(0); }
-                10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
-                20%, 40%, 60%, 80% { transform: translateX(10px); }
-            }
-        `;
-        document.head.appendChild(shakeStyle);
-
-        // التنبيه الفوري - مثل البايثون
+        // التنبيه الفوري
         function showInitialAlert() {
             setTimeout(() => {
                 alert('🚨 WARNING: SECURITY BREACH DETECTED! 🚨');
@@ -377,7 +401,6 @@
             startCountdown();
             showInitialAlert();
             
-            // تأثير وميض العنوان - إضافة
             let titleCount = 0;
             setInterval(() => {
                 document.title = titleCount % 2 === 0 ? 
